@@ -1,0 +1,31 @@
+Twits.js is my ghetto-sled widget for including a customizable Twitter feed
+on your web-page. It requires Prototype 1.6, available from 
+http://prototypejs.org
+
+Without code from the following URLS and their respective authors this script 
+would have taken about 3 days instead of 3 hours.
+
+http://www.drunkenfist.com/304/2007/08/12/json-feeds-for-fun-and-profit-part-2-callbacks-with-twitter/ (Rob Larsen)
+http://www.simonwhatley.co.uk/parsing-twitter-usernames-hashtags-and-urls-with-javascript (Simon Whatley)
+http://twitter.pbwiki.com/RelativeTimeScripts (Mike Demers)
+
+Usage: 
+
+Include the following scripts in your page's header:
+
+<script type="text/javascript" src="prototype-1.6.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="twits.js" charset="utf-8"></script>
+<link rel="stylesheet" href="twits.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+The TwitsOptions hash contains the configuration info for the script:
+  user: your twitter username (authentication is not supported, your feed must
+  be public)
+  
+  div: the #ID of an element into which to insert your twitter list
+  
+  render: a function to render an individual tweet into a UL element. it is 
+  assumed but not required that each tweet appears in its own LI element.
+
+You can roll your own twits.css stylesheet to style the tweets as you please.
+
+- Josh 1/4/2009
