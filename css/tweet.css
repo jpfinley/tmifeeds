@@ -1,0 +1,15 @@
+ul.twitter_list {
+  font-family: helvetica,sans-serif;
+}
+
+li.tweet {
+  padding: 5px 0px;
+}
+
+li.tweet span.text {
+  
+}
+
+li.tweet span.info {
+  font-size: 75%;
+}
