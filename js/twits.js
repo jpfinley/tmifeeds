@@ -47,7 +47,7 @@ var TwitsOptions = {
   render: function(tweet) {
     var text = "<li class='tweet'>";
     text += "<span class='text'>"+tweet.text.parseURL().parseUsername().parseHashtag()+"</span> ";
-    text += "<span class='info'>"+linkToStatus(tweet.user.screen_name, tweet.id, new Date(Date.parse(tweet.created_at)).toRTime());
+    text += "<span class='info'>"+linkToStatus(tweet.user.screen_name, tweet.id, new Date(Date.parse(tweet.created_at)).toRelativeTimeString());
     if (tweet.in_reply_to_status_id) {
       text += " "+replyToLink(tweet.in_reply_to_screen_name, tweet.in_reply_to_status_id);
     }
@@ -56,8 +56,36 @@ var TwitsOptions = {
   }
 }
 
+function renderTweets(tweets) {
+  var div = $(TwitsOptions.div);
+  div.insert("<ul class='twitter_list'>");
+  var list = div.down(".twitter_list")
+  tweets.each(function(t) {
+    var text = TwitsOptions.render(t);
+    list.insert(text);
+  });
+}
+
+function replyToLink(userName, statusId) {
+  return linkToStatus(userName, statusId, "in reply to "+userName);
+}
+
+function linkToStatus(userName, statusId, text) {
+  return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
+}
+
+Event.observe(window, 'load', function() {
+   var twitter_JSON = document.createElement("script");
+   twitter_JSON.type="text/javascript"
+   twitter_JSON.src="http://twitter.com/statuses/user_timeline/"+TwitsOptions.user+".json?callback=renderTweets&count="+TwitsOptions.n
+   document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
+});
+
+
+/* JavaScript extensions */
+
 Object.extend(Date.prototype, {
-  toRTime: function() {
+  toRelativeTimeString: function() {
     var delta = parseInt((new Date().getTime() - this) / 1000);
     if(delta < 60) {
       return 'less than a minute ago';
@@ -99,27 +127,3 @@ Object.extend(String.prototype, {
   }
 });
 
-function renderTweets(tweets) {
-  var div = $(TwitsOptions.div);
-  div.insert("<ul class='twitter_list'>");
-  var list = div.down(".twitter_list")
-  tweets.each(function(t) {
-    var text = TwitsOptions.render(t);
-    list.insert(text);
-  });
-}
-
-function replyToLink(userName, statusId) {
-  return linkToStatus(userName, statusId, "in reply to "+userName);
-}
-
-function linkToStatus(userName, statusId, text) {
-  return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
-}
-
-(function go() {
-   var twitter_JSON = document.createElement("script");
-   twitter_JSON.type="text/javascript"
-   twitter_JSON.src="http://twitter.com/statuses/user_timeline/"+TwitsOptions.user+".json?callback=renderTweets&count="+TwitsOptions.n
-   document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
-})();
