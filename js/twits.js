@@ -24,8 +24,7 @@
     
     div: the #ID of an element into which to insert your twitter list
     
-    render: a function to render an individual tweet into a UL element. it is 
-    assumed but not required that each tweet appears in its own LI element.
+    render: a function to render an individual tweet as a string.
   
   You can roll your own twits.css stylesheet to style the tweets as you please.
 
@@ -45,13 +44,12 @@ var TwitsOptions = {
 
   // render function renders an individual tweet
   render: function(tweet) {
-    var text = "<li class='tweet'>";
-    text += "<span class='text'>"+tweet.text.parseURL().parseUsername().parseHashtag()+"</span> ";
+    var text = "<span class='text'>"+tweet.text.parseURL().parseUsername().parseHashtag()+"</span> ";
     text += "<span class='info'>"+linkToStatus(tweet.user.screen_name, tweet.id, new Date(Date.parse(tweet.created_at)).toRelativeTimeString());
     if (tweet.in_reply_to_status_id) {
       text += " "+replyToLink(tweet.in_reply_to_screen_name, tweet.in_reply_to_status_id);
     }
-    text += "</span></li>";
+    text += "</span>";
     return text;
   }
 }
@@ -61,7 +59,9 @@ function renderTweets(tweets) {
   div.insert("<ul class='twitter_list'>");
   var list = div.down(".twitter_list")
   tweets.each(function(t) {
-    var text = TwitsOptions.render(t);
+    var text = "<li class='tweet'>";
+    text += TwitsOptions.render(t);
+    text += "</li>";
     list.insert(text);
   });
 }
