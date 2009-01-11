@@ -1,17 +1,17 @@
-div#tweets {
+div#feeds {
   font-family: helvetica,sans-serif;
 }
 
-ul.twitter_list {
+#feeds ul {
 }
 
-li.tweet {
+#feeds ul li {
   padding: 5px 0px;
 }
 
-  li.tweet span.text {
+  #feeds ul li.tweet span.text {
   }
 
-  li.tweet span.info {
+  #feeds ul li.tweet span.info {
     font-size: 75%;
   }
