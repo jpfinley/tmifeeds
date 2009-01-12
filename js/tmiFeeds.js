@@ -2,12 +2,10 @@ var TMIFeed = Class.create({
   element: '',
   fetch: function(js_url, element) {
     this.element = element;
-    Event.observe(window, 'load', function() {
-       var twitter_JSON = document.createElement("script");
-       twitter_JSON.type="text/javascript"
-       twitter_JSON.src=js_url
-       document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
-    });
+    var twitter_JSON = document.createElement("script");
+    twitter_JSON.type="text/javascript"
+    twitter_JSON.src=js_url
+    document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
   },
   getItems: function(feed) { return feed; },
   renderFeed: function(feed) {
@@ -24,7 +22,7 @@ var TMIFeed = Class.create({
       html.push("</li>");
     }.bind(this));
     html.push("</ul>");
-    $(this.element).insert(html.join(''));    
+    $(this.element).insert(html.join(''));
   },
   renderItem: function(item) {
     return item.toString();
@@ -35,9 +33,6 @@ var TMIFeed = Class.create({
 });
 
 
-
-
-
 // Twitter
 var tweets = new TMIFeed();
 Object.extend(tweets, {
@@ -46,36 +41,53 @@ Object.extend(tweets, {
   },
   replyToLink: function(userName, statusId) {
     return this.linkToStatus(userName, statusId, "in reply to "+userName);
-  }, 
-  renderItem: function(item) { 
-    return item.text.parseURL().parseUsername().parseHashtag(); 
+  },
+  renderItem: function(item) {
+    return item.text.parseURL().parseUsername().parseHashtag();
   },
   renderTimeStamp: function(item) {
     var html = [];
     var date = new Date(Date.parse(item.created_at)).toRelativeTimeString();
     html.push(this.linkToStatus(item.user.screen_name, item.id, date));
     if (item.in_reply_to_status_id) {
+      html.push(' ');
       html.push(this.replyToLink(item.in_reply_to_screen_name, item.in_reply_to_status_id));
     }
     return html.join('');
   }
-})
-tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
-
-
-
-
+});
 
 
 // Google Reader
 var greader = new TMIFeed();
+Object.extend(greader, {
+  getItems: function(feed) {
+    return feed.items;
+  },
+  renderItem: function(item) {
+    var html = [];
+    var title = item.title;
+    var url = item.alternate.href;
+    var summary = item.content && item.content || '';
+    html.push("<a href='"+url+"' title=\""+summary+"\">");
+    html.push(title);
+    html.push("</a>");
+    return html.join('');
+  },
+  renderTimeStamp: function(item) {
+    var dateString = new Date(item.published*1000).toRelativeTimeString();
+    var sourceLink = "<a href='"+item.origin.htmlUrl+"'>"+item.origin.title+"</a>";
+    return " "+dateString+" from "+sourceLink;
+  }
+});
 
-greader.getItems = function(feed) { return feed.items; }
-greader.renderItem = function(item) { return item.title; };
-greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
 
 
 
+Event.observe(window, 'load', function() {
+  tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
+  greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
+});
 
 
 /* JavaScript extensions */
