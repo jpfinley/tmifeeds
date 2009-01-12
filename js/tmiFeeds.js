@@ -34,8 +34,7 @@ var TMIFeed = Class.create({
 
 
 // Twitter
-var tweets = new TMIFeed();
-Object.extend(tweets, {
+var tweets = Object.extend(new TMIFeed(), {
   linkToStatus: function(userName, statusId, text) {
     return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
   },
@@ -59,8 +58,7 @@ Object.extend(tweets, {
 
 
 // Google Reader
-var greader = new TMIFeed();
-Object.extend(greader, {
+var greader = Object.extend(new TMIFeed(), {
   getItems: function(feed) {
     return feed.items;
   },
