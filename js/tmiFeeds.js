@@ -1,6 +1,5 @@
-var tmiFeeds = Class.create({
+var TMIFeed = Class.create({
   element: '',
-  items: [],
   fetch: function(js_url, element) {
     this.element = element;
     Event.observe(window, 'load', function() {
@@ -14,10 +13,14 @@ var tmiFeeds = Class.create({
   renderFeed: function(feed) {
     var items = this.getItems(feed);
     var html = [];
+    var p = html.push;
     html.push("<ul>");
     items.each(function(item) {
       html.push("<li>");
       html.push(this.renderItem(item));
+      html.push(" <span class='timestamp'>");
+      html.push(this.renderTimeStamp(item));
+      html.push("</span>");
       html.push("</li>");
     }.bind(this));
     html.push("</ul>");
@@ -25,27 +28,55 @@ var tmiFeeds = Class.create({
   },
   renderItem: function(item) {
     return item.toString();
+  },
+  renderTimeStamp: function(item) {
+    return '';
   }
 });
 
+
+
+
+
 // Twitter
-var tweets = new tmiFeeds();
-tweets.linkToStatus = function(userName, statusId, text) {
-  return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
-}
-tweets.replyToLink = function(userName, statusId) {
-  return linkToStatus(userName, statusId, "in reply to "+userName);
-}
-tweets.renderItem = function(item) { return item.text; };
+var tweets = new TMIFeed();
+Object.extend(tweets, {
+  linkToStatus: function(userName, statusId, text) {
+    return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
+  },
+  replyToLink: function(userName, statusId) {
+    return this.linkToStatus(userName, statusId, "in reply to "+userName);
+  }, 
+  renderItem: function(item) { 
+    return item.text.parseURL().parseUsername().parseHashtag(); 
+  },
+  renderTimeStamp: function(item) {
+    var html = [];
+    var date = new Date(Date.parse(item.created_at)).toRelativeTimeString();
+    html.push(this.linkToStatus(item.user.screen_name, item.id, date));
+    if (item.in_reply_to_status_id) {
+      html.push(this.replyToLink(item.in_reply_to_screen_name, item.in_reply_to_status_id));
+    }
+    return html.join('');
+  }
+})
 tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
 
 
+
+
+
+
 // Google Reader
-var greader = new tmiFeeds();
+var greader = new TMIFeed();
 
 greader.getItems = function(feed) { return feed.items; }
 greader.renderItem = function(item) { return item.title; };
 greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
+
+
+
+
 
 /* JavaScript extensions */
 
