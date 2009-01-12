@@ -1,3 +1,12 @@
+Event.observe(window, 'load', function() {
+  // TODO: automate this. store login/count as options. 
+  // Register the readers with the superclass and instantiate automagically.
+  tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
+  greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
+});
+
+
+
 var TMIFeed = Class.create({
   element: '',
   fetch: function(js_url, element) {
@@ -22,12 +31,16 @@ var TMIFeed = Class.create({
       html.push("</li>");
     }.bind(this));
     html.push("</ul>");
+    html.push(this.renderInfo());
     $(this.element).insert(html.join(''));
   },
   renderItem: function(item) {
     return item.toString();
   },
   renderTimeStamp: function(item) {
+    return '';
+  },
+  renderInfo: function() {
     return '';
   }
 });
@@ -79,13 +92,6 @@ var greader = Object.extend(new TMIFeed(), {
   }
 });
 
-
-
-
-Event.observe(window, 'load', function() {
-  tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
-  greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
-});
 
 
 /* JavaScript extensions */
