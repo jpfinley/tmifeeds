@@ -79,10 +79,17 @@ var greader = Object.extend(new TMIFeed(), {
     var html = [];
     var title = item.title;
     var url = item.alternate.href;
-    var summary = item.content && item.content || '';
+    var summary = item.content && item.content.sub(/"/, '&quot;') || '';
     html.push("<a href='"+url+"' title=\""+summary+"\">");
     html.push(title);
     html.push("</a>");
+    if (item.annotations) {
+      item.annotations.each(function(annotation){
+        html.push("<span class='annotation'>");
+        html.push(annotation.content);
+        html.push("</span>");
+      });
+    }
     return html.join('');
   },
   renderTimeStamp: function(item) {

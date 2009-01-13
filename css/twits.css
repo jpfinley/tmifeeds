@@ -1,5 +1,6 @@
 div#feeds {
   font-family: helvetica,sans-serif;
+  font-size: 12px;
 }
 
 #feeds ul {
@@ -9,9 +10,17 @@ div#feeds {
   padding: 5px 0px;
 }
 
-  #feeds ul li.tweet span.text {
+  #feeds ul li span {
+
   }
 
-  #feeds ul li.tweet span.info {
+  #feeds ul li span.annotation {
+    font-size: 85%;
+    padding: 3px 0px;
+    font-style: italic;
+    display: block;
+  }
+
+  #feeds ul li span.timestamp {
     font-size: 75%;
   }
