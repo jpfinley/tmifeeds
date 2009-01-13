@@ -1,6 +1,7 @@
 Event.observe(window, 'load', function() {
-  tweets.init('tweets', 'stringbot', 10);
-  greader.init('greader', '01250286733713903147', 10);
+  // tweets.init('tweets', 'stringbot', 10);
+  // greader.init('greader', '01250286733713903147', 10);
+  flickr.init('flickr', 'stringbot', 10);
 });
 
 
@@ -117,6 +118,27 @@ var greader = Object.extend(new TMIFeed(), {
   }
 });
 
+/* Flick (via FriendFeed) */
+
+// http://friendfeed.com/api/feed/user/stringbot?service=flickr
+flickr = Object.extend(new TMIFeed(), {
+  buildUrl: function(user, count){
+    var callback = 'flickr.renderFeed';
+    return "http://friendfeed.com/api/feed/user/"+user+"?service=flickr&num="+count+"&callback="+callback
+  }, 
+  getItems: function(feed) {
+    return feed.entries;
+  },
+  renderItem: function(item) {
+    var image_url = item.media[0].thumbnails[0].url;
+    html = [];
+    html.push(item.title);
+    html.push("<img src='");
+    html.push(image_url);
+    html.push("'>")
+    return html.join('');
+  }
+});
 
 
 /* JavaScript extensions */
