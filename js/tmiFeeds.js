@@ -1,19 +1,29 @@
 Event.observe(window, 'load', function() {
-  // TODO: automate this. store login/count as options. 
-  // Register the readers with the superclass and instantiate automagically.
-  tweets.fetch("http://twitter.com/statuses/user_timeline/stringbot.json?callback=tweets.renderFeed&count=5", "tweets");
-  greader.fetch("http://www.google.com/reader/public/javascript/user/01250286733713903147/state/com.google/broadcast?n=5&callback=greader.renderFeed", "greader");
+  tweets.init('tweets', 'stringbot', 10);
+  greader.init('greader', '01250286733713903147', 10);
 });
 
 
 
 var TMIFeed = Class.create({
   element: '',
-  fetch: function(js_url, element) {
+  user: 'stringbot',
+  count: 5,
+  js_url: '',
+  init: function(element, user, count) {
     this.element = element;
+    this.user = user;
+    this.count = count;
+    this.js_url = this.buildUrl(user,count);
+    this.fetch();
+  },
+  buildUrl: function(user,count) {
+    return "http://override.me.dude/json_call?user="+user+"&n="+count;
+  },
+  fetch: function() {
     var twitter_JSON = document.createElement("script");
-    twitter_JSON.type="text/javascript"
-    twitter_JSON.src=js_url
+    twitter_JSON.type="text/javascript";
+    twitter_JSON.src=this.js_url;
     document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
   },
   getItems: function(feed) { return feed; },
@@ -48,6 +58,10 @@ var TMIFeed = Class.create({
 
 // Twitter
 var tweets = Object.extend(new TMIFeed(), {
+  buildUrl: function(user,count) {
+    var callback = 'tweets.renderFeed'; // TODO: this can be abstracted
+    return "http://twitter.com/statuses/user_timeline/"+user+".json?callback="+callback+"&count="+count;
+  },
   linkToStatus: function(userName, statusId, text) {
     return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
   },
@@ -72,6 +86,10 @@ var tweets = Object.extend(new TMIFeed(), {
 
 // Google Reader
 var greader = Object.extend(new TMIFeed(), {
+  buildUrl: function(user,count){
+    var callback = 'greader.renderFeed';
+    return "http://www.google.com/reader/public/javascript/user/"+user+"/state/com.google/broadcast?n="+count+"&callback="+callback;
+  },
   getItems: function(feed) {
     return feed.items;
   },

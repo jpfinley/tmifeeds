@@ -1,9 +1,12 @@
 div#feeds {
   font-family: helvetica,sans-serif;
   font-size: 12px;
+  padding-left: 15px;
 }
 
 #feeds ul {
+  list-style: none;
+  padding-left: 0px;
 }
 
 #feeds ul li {
