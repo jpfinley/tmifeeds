@@ -26,3 +26,7 @@ div#feeds {
   #feeds ul li span.timestamp {
     font-size: 75%;
   }
+
+  #feeds ul li img {
+    border: 1px solid;
+  }

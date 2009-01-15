@@ -1,6 +1,6 @@
 Event.observe(window, 'load', function() {
-  // tweets.init('tweets', 'stringbot', 10);
-  // greader.init('greader', '01250286733713903147', 10);
+  tweets.init('tweets', 'stringbot', 10);
+  greader.init('greader', '01250286733713903147', 10);
   flickr.init('flickr', 'stringbot', 10);
 });
 
@@ -37,7 +37,7 @@ var TMIFeed = Class.create({
       html.push("<li>");
       html.push(this.renderItem(item));
       html.push(" <span class='timestamp'>");
-      html.push(this.renderTimeStamp(item));
+      html.push(this.renderCaption(item));
       html.push("</span>");
       html.push("</li>");
     }.bind(this));
@@ -48,7 +48,7 @@ var TMIFeed = Class.create({
   renderItem: function(item) {
     return item.toString();
   },
-  renderTimeStamp: function(item) {
+  renderCaption: function(item) {
     return '';
   },
   renderInfo: function() {
@@ -72,7 +72,7 @@ var tweets = Object.extend(new TMIFeed(), {
   renderItem: function(item) {
     return item.text.parseURL().parseUsername().parseHashtag();
   },
-  renderTimeStamp: function(item) {
+  renderCaption: function(item) {
     var html = [];
     var date = new Date(Date.parse(item.created_at)).toRelativeTimeString();
     html.push(this.linkToStatus(item.user.screen_name, item.id, date));
@@ -111,7 +111,7 @@ var greader = Object.extend(new TMIFeed(), {
     }
     return html.join('');
   },
-  renderTimeStamp: function(item) {
+  renderCaption: function(item) {
     var dateString = new Date(item.published*1000).toRelativeTimeString();
     var sourceLink = "<a href='"+item.origin.htmlUrl+"'>"+item.origin.title+"</a>";
     return " "+dateString+" from "+sourceLink;
@@ -125,12 +125,12 @@ flickr = Object.extend(new TMIFeed(), {
   buildUrl: function(user, count){
     var callback = 'flickr.renderFeed';
     return "http://friendfeed.com/api/feed/user/"+user+"?service=flickr&num="+count+"&callback="+callback
-  }, 
+  },
   getItems: function(feed) {
     return this.flatten(feed.entries);
   },
   flatten: function(entries) {
-    // friend feed entries come in "bunches." we're going to flatten them into a list.
+    // friendfeed entries come in "bunches." we're going to flatten them into a list.
     var media = [];
     entries.each(function(entry) {
       entry.media.each(function(item) {
@@ -141,13 +141,18 @@ flickr = Object.extend(new TMIFeed(), {
   },
   renderItem: function(item) {
     var html = [];
+    var link_url = item.link;
     var image_url = item.thumbnails[0].url;
-    html.push("<img src='");
-    html.push(image_url);
-    html.push("'>");
-    html.push(item.title);
+    html.push("<a href='"+link_url+"'>");
+    html.push("<img src='"+image_url+"'>");
+    html.push("</a>");
     return html.join('');
+  },
+  renderCaption: function(item) {
+    var link_url = item.link;
+    return "<a href='"+link_url+"'>"+item.title+"</a>";
   }
+
 });
 
 
