@@ -118,7 +118,7 @@ var greader = Object.extend(new TMIFeed(), {
   }
 });
 
-/* Flick (via FriendFeed) */
+/* Flickr (via FriendFeed) */
 
 // http://friendfeed.com/api/feed/user/stringbot?service=flickr
 flickr = Object.extend(new TMIFeed(), {
@@ -127,15 +127,25 @@ flickr = Object.extend(new TMIFeed(), {
     return "http://friendfeed.com/api/feed/user/"+user+"?service=flickr&num="+count+"&callback="+callback
   }, 
   getItems: function(feed) {
-    return feed.entries;
+    return this.flatten(feed.entries);
+  },
+  flatten: function(entries) {
+    // friend feed entries come in "bunches." we're going to flatten them into a list.
+    var media = [];
+    entries.each(function(entry) {
+      entry.media.each(function(item) {
+        media.push(item);
+      });
+    });
+    return media;
   },
   renderItem: function(item) {
-    var image_url = item.media[0].thumbnails[0].url;
-    html = [];
-    html.push(item.title);
+    var html = [];
+    var image_url = item.thumbnails[0].url;
     html.push("<img src='");
     html.push(image_url);
-    html.push("'>")
+    html.push("'>");
+    html.push(item.title);
     return html.join('');
   }
 });
