@@ -1,9 +1,12 @@
-Twits.js is my ghetto-sled widget for including a customizable Twitter feed
-on your web-page. It requires Prototype 1.6, available from 
-http://prototypejs.org
+TmiFeeds is a library for rendering JSON feeds on your internets. It includes 
+Prototype 1.6, available from http://prototypejs.org. It's really not much more
+than a simple factoring out of feed rendering idioms into an extendable JS
+class, making use of the emerging standard for JSON resources to provide a 
+callback parameter.
 
-Without code from the following URLS and their respective authors this script 
-would have taken about 3 days instead of 3 hours.
+I found much of the code needed to create this tool/toy at the following URLS 
+and wish to express my sincere thanks to the authors for doing all the boring 
+parts of the work for me.
 
 http://www.drunkenfist.com/304/2007/08/12/json-feeds-for-fun-and-profit-part-2-callbacks-with-twitter/ (Rob Larsen)
 http://www.simonwhatley.co.uk/parsing-twitter-usernames-hashtags-and-urls-with-javascript (Simon Whatley)
@@ -13,19 +16,22 @@ Usage:
 
 Include the following scripts in your page's header:
 
-<script type="text/javascript" src="prototype-1.6.0.3.js" charset="utf-8"></script>
-<script type="text/javascript" src="twits.js" charset="utf-8"></script>
-<link rel="stylesheet" href="twits.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script type="text/javascript" src="js/prototype-1.6.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/tmiFeeds.js" charset="utf-8"></script>
+<link rel="stylesheet" href="css/tmiFeeds.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
-The TwitsOptions hash contains the configuration info for the script:
-  user: your twitter username (authentication is not supported, your feed must
-  be public)
-  
-  div: the #ID of an element into which to insert your twitter list
-  
-  render: a function to render an individual tweet into a UL element. it is 
-  assumed but not required that each tweet appears in its own LI element.
+TMIFeed is a Prototype 1.6 "Class" that encapsulates the common functionality 
+used by the singleton implementations. I've implemented three instances which 
+can be configured to fetch feeds from Twitter, Google Reader and Flickr (via the 
+FriendFeed API). You just supply the ID of the element you wish to render into,
+your account credentials, and the number of items to render for each provider
+like so:
 
-You can roll your own twits.css stylesheet to style the tweets as you please.
+tweets.init('tweets', 'stringbot', 10);
+greader.init('greader', '01250286733713903147', 10);
+flickr.init('flickr', 'stringbot', 10);
 
-- Josh 1/4/2009
+
+Adjust the tmiFeeds.css stylesheet to style the feed items however you please.
+
+- Josh 2/13/2009
