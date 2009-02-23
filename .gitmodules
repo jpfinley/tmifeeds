@@ -1,0 +1,3 @@
+[submodule "vendor/shudder"]
+	path = vendor/shudder
+	url = git://github.com/centro/shudder.git

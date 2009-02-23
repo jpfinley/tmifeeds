@@ -1,8 +1,10 @@
-Event.observe(window, 'load', function() {
-  tweets.init('tweets', 'stringbot', 10);
-  greader.init('greader', '01250286733713903147', 10);
-  flickr.init('flickr', 'stringbot', 10);
-});
+if (this['Event']) {
+  Event.observe(window, 'load', function() {
+    tweets.init('tweets', 'stringbot', 10);
+    greader.init('greader', '01250286733713903147', 10);
+    flickr.init('flickr', 'stringbot', 10);
+  });
+}
 
 
 
@@ -64,7 +66,7 @@ var tweets = Object.extend(new TMIFeed(), {
     return "http://twitter.com/statuses/user_timeline/"+user+".json?callback="+callback+"&count="+count;
   },
   linkToStatus: function(userName, statusId, text) {
-    return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>"
+    return "<a href='http://twitter.com/"+userName+"/status/"+statusId+"'>"+text+"</a>";
   },
   replyToLink: function(userName, statusId) {
     return this.linkToStatus(userName, statusId, "in reply to "+userName);
@@ -124,7 +126,7 @@ var greader = Object.extend(new TMIFeed(), {
 flickr = Object.extend(new TMIFeed(), {
   buildUrl: function(user, count){
     var callback = 'flickr.renderFeed';
-    return "http://friendfeed.com/api/feed/user/"+user+"?service=flickr&num="+count+"&callback="+callback
+    return "http://friendfeed.com/api/feed/user/"+user+"?service=flickr&num="+count+"&callback="+callback;
   },
   getItems: function(feed) {
     return this.flatten(feed.entries);
@@ -160,23 +162,23 @@ flickr = Object.extend(new TMIFeed(), {
 
 Object.extend(Date.prototype, {
   toRelativeTimeString: function() {
-    var delta = parseInt((new Date().getTime() - this) / 1000);
+    var delta = parseInt((new Date().getTime() - this) / 1000, 10);
     if(delta < 60) {
       return 'less than a minute ago';
     } else if(delta < 120) {
       return 'about a minute ago';
     } else if(delta < (45*60)) {
-      return (parseInt(delta / 60)).toString() + ' minutes ago';
+      return (parseInt(delta / 60, 10)).toString() + ' minutes ago';
     } else if(delta < (90*60)) {
       return 'about an hour ago';
     } else if(delta < (24*60*60)) {
-      var n = parseInt(delta / 3600);
+      var n = parseInt(delta / 3600, 10);
       dur = n == 1 ? 'an hour' : n.toString() + ' hours';
       return 'about ' + dur + ' ago';
     } else if(delta < (48*60*60)) {
       return '1 day ago';
     } else {
-      return (parseInt(delta / 86400)).toString() + ' days ago';
+      return (parseInt(delta / 86400, 10)).toString() + ' days ago';
     }
   }
 });
@@ -189,13 +191,13 @@ Object.extend(String.prototype, {
   },
   parseUsername: function() {
     return this.replace(/[@]+[A-Za-z0-9-_]+/, function(u) {
-      var username = u.replace("@","")
+      var username = u.replace("@","");
       return u.link("http://twitter.com/"+username);
     });
   },
   parseHashtag: function() {
     return this.replace(/[#]+[A-Za-z0-9-_]+/, function(t) {
-      var tag = t.replace("#","%23")
+      var tag = t.replace("#","%23");
       return t.link("http://search.twitter.com/search?q="+tag);
     });
   }
