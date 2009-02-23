@@ -34,4 +34,17 @@ flickr.init('flickr', 'stringbot', 10);
 
 Adjust the tmiFeeds.css stylesheet to style the feed items however you please.
 
+SUBMODULES ALERT:
+
+If you want to run the Shudder tests, you'll need to have spidermonkey installed 
+with the non-standard File object compiled in (see Shudder docs for more detail).
+Shudder is included as a submodule. You'll need to run the following commands to
+use it:
+
+$ git submodule init
+$ git submodule update
+
+Shudder has its own submodule dependency as well, Erzatz, so you'll want to
+run the same init and update commands in ./vendor/shudder/ as well.
+
 - Josh 2/13/2009
