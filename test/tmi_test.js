@@ -53,6 +53,22 @@ TestCase.define("TMI", function(){
     });
   });
 
+  this.context("Extended String class", function() {
+    this.setup(function() {
+      this.test_string = "@userid http://url.com/link_text some text that doesn't link"
+    });
+
+    this.should("convert @userid text to a link to the user's twitter page", function() {
+      var munged = this.test_string.parseUsername();
+      this.assert(munged.match(/twitter.com\/userid/));
+    });
+
+    this.should("convert a text url to a link", function() {
+      var munged = this.test_string.parseURL();
+      this.assert(munged.match(/href=.http:\/\/url\.com\/link_text./));
+    });
+  });
+
 });
 
 Object.extend(Date.prototype, {
