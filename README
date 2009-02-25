@@ -1,4 +1,4 @@
-TmiFeeds is a library for rendering JSON feeds on your internets. It includes 
+TMI is a library for rendering JSON feeds on your internets. It includes 
 Prototype 1.6, available from http://prototypejs.org. It's really not much more
 than a simple factoring out of feed rendering idioms into an extendable JS
 class, making use of the emerging standard for JSON resources to provide a 
@@ -17,8 +17,10 @@ Usage:
 Include the following scripts in your page's header:
 
 <script type="text/javascript" src="js/prototype-1.6.0.3.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/tmiFeeds.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/tmi.js" charset="utf-8"></script>
 <link rel="stylesheet" href="css/tmiFeeds.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+Code:
 
 TMIFeed is a Prototype 1.6 "Class" that encapsulates the common functionality 
 used by the singleton implementations. I've implemented three instances which 

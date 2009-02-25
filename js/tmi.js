@@ -7,12 +7,24 @@ if (this['Event']) {
 }
 
 
+// TMIFeed is a Prototype 1.6 "Class" that encapsulates the common functionality
+// used by the singleton implementations. I've implemented three instances which
+// can be configured to fetch feeds from Twitter, Google Reader and Flickr (via the
+// FriendFeed API). You just supply the ID of the element you wish to render into,
+// your account credentials, and the number of items to render for each provider
+// like so:
+//
+// tweets.init('tweets', 'stringbot', 10);
+// greader.init('greader', '01250286733713903147', 10);
+// flickr.init('flickr', 'stringbot', 10);
 
 var TMIFeed = Class.create({
-  element: '',
-  user: 'stringbot',
-  count: 5,
-  js_url: '',
+
+  element: '', // DOM element into which we shall render
+  user: 'stringbot', // username or feed id
+  count: 5, // number of list items
+  js_url: '', // feed url goes here
+
   init: function(element, user, count) {
     this.element = element;
     this.user = user;
@@ -20,16 +32,26 @@ var TMIFeed = Class.create({
     this.js_url = this.buildUrl(user,count);
     this.fetch();
   },
+
+  // override this to build the feed url
   buildUrl: function(user,count) {
     return "http://override.me.dude/json_call?user="+user+"&n="+count;
   },
+
+  // fetch the feed
   fetch: function() {
     var twitter_JSON = document.createElement("script");
     twitter_JSON.type="text/javascript";
     twitter_JSON.src=this.js_url;
     document.getElementsByTagName("head")[0].appendChild(twitter_JSON);
   },
+
+  // extract a list of renderable objects from the feed object
+  // if the json payload returned from the server is already a list
+  // you don't have to do anything with this
   getItems: function(feed) { return feed; },
+
+  // render a ul containing each object from the payload list as an li
   renderFeed: function(feed) {
     var items = this.getItems(feed);
     var html = [];
@@ -47,13 +69,19 @@ var TMIFeed = Class.create({
     html.push(this.renderInfo());
     $(this.element).insert(html.join(''));
   },
+
+  // render a single item
   renderItem: function(item) {
     return item.toString();
   },
+
+  // render a timestamp or caption
   renderCaption: function(item) {
     return '';
   },
-  renderInfo: function() {
+
+  // render feed info
+  renderInfo: function(item) {
     return '';
   }
 });

@@ -1,5 +1,5 @@
 load(__DIR__ + "/../vendor/shudder/vendor/prototype-minor/prototype.js");
-load(__DIR__ + "/../js/tmiFeeds.js");
+load(__DIR__ + "/../js/tmi.js");
 
 TestCase.define("TMI", function(){
   this.should("should load in browserless JavaScript context", function() {
