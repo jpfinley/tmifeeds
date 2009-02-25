@@ -1,5 +1,6 @@
 if (this['Event']) {
   Event.observe(window, 'load', function() {
+    delicious.init('delicious', 'jpfinley', 10);
     tweets.init('tweets', 'stringbot', 10);
     greader.init('greader', '01250286733713903147', 10);
     flickr.init('flickr', 'stringbot', 10);
@@ -86,6 +87,25 @@ var TMIFeed = Class.create({
   }
 });
 
+// delicious
+
+var delicious = Object.extend(new TMIFeed(), {
+  buildUrl: function(user, count) {
+    var callback = 'delicious.renderFeed';
+    return "http://feeds.delicious.com/v2/json/" + user + "?callback=" + callback + "&count=" + count;
+  },
+  renderItem: function(item) {
+    var html = [];
+    var title = item.d;
+    var url = item.u;
+    html.push("<a href='");
+    html.push(url);
+    html.push("'>");
+    html.push(title);
+    html.push("</a>");
+    return html.join('');
+  }
+});
 
 // Twitter
 var tweets = Object.extend(new TMIFeed(), {
