@@ -1,32 +1,12 @@
-div#feeds {
-  font-family: helvetica,sans-serif;
-  font-size: 12px;
-  padding-left: 15px;
-}
+#feeds { font-family: 'lucida grande', sans-serif; font-size: 12px; }
 
-#feeds ul {
-  list-style: none;
-  padding-left: 0px;
-}
+.tmi-feed {  width: 200px; float: left; margin-right: 10px; }
+#feeds ul { list-style-type: none; padding-left: 0px; }
 
-#feeds ul li {
-  padding: 5px 0px;
-}
-
-  #feeds ul li span {
-    display: block;
-  }
-
-  #feeds ul li span.annotation {
-    font-size: 85%;
-    padding: 3px 0px;
-    font-style: italic;
-  }
-
-  #feeds ul li span.timestamp {
-    font-size: 75%;
-  }
-
-  #feeds ul li img {
-    border: 1px solid;
-  }
+#feeds ul li { padding: 5px 0px; }
+  #feeds span { display: block; }
+  #feeds img { border: 1px solid; }
+  span.annotation { padding-top: 3px; font-style: italic; }
+  span.timestamp { font-size: 75%; padding-top: 3px; }
+  .timestamp a { color: gray; text-decoration: none; }
+    .timestamp a:hover { text-decoration: underline; }
